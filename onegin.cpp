@@ -53,7 +53,7 @@ int main()
     {
         for (int j = i + 1; j < str_num; j++)
         {
-            if (strcmp(addr[j], addr[i]) < 0)
+            if (strcmp(addr[j], addr[i]) > 0)
             {
                 buffer = addr[j];
                 addr[j] = addr[i];
@@ -68,6 +68,6 @@ int main()
     printf("\nsorted poem:\n");
     for (int i = 0; i < str_num; i++)
     {
-        printf("\n%s", addr[i]);
+        printf("\n%s", addr[i]); 
     }
 }
