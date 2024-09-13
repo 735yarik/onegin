@@ -52,22 +52,24 @@ int main()
     for (int i = 0; i < str_num - 1; i++)
     {
         for (int j = i + 1; j < str_num; j++)
-        {
-            if (strcmp(addr[j], addr[i]) > 0)
+        {   
+            if (strcmp(addr[j], addr[i]) < 0)
             {
                 buffer = addr[j];
-                addr[j] = addr[i];
-                addr[i] = buffer;
+                         addr[j] = addr[i];
+                                   addr[i] = buffer;
             }
         }
     }
 
     fclose(file);
-    free(poem);
 
     printf("\nsorted poem:\n");
     for (int i = 0; i < str_num; i++)
     {
-        printf("\n%s", addr[i]); 
+        printf("\nstr%d %s", i, addr[i]); 
     }
+
+    free(poem);
+    
 }
