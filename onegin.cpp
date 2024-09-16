@@ -1,19 +1,26 @@
 #include <stdio.h>
 #include <TXLib.h>
 
-// ftell
-// fseek
-// rewind
-// fread
-
 void input(size_t *size, char **poem);
 void output(char **addr, int str_num);
 void str_count(char *poem, int *str_num, size_t size);
 void addr_array(char ***addr, int str_num, char *poem, size_t size);
-void sort(char **addr, int str_num);
+void sort(char **addr, int str_num); 
 
 int main()
 {
+
+    // struct poem_struct
+    // {
+
+    //     size_t size = 0;
+    //     int str_num = 0;
+    //     char *poem = NULL;
+    //     char **addr = NULL;
+
+    // };
+
+    // poem_struct poem_info;
 
     size_t size = 0;
     int str_num = 0;
@@ -42,15 +49,17 @@ void sort(char **addr, int str_num)
             if (strcmp(addr[j], addr[i]) < 0)
             {
                 buffer = addr[j];
-                         addr[j] = addr[i];
-                                   addr[i] = buffer;
+                addr[j] = addr[i];
+                addr[i] = buffer;
             }
         }
     }
 
 }
 
-void output(char **addr, int str_num)
+//isalpha
+
+void output(char **addr, int str_num)  
 {
 
     printf("\nsorted poem:\n");
@@ -80,13 +89,16 @@ void input(size_t *size, char **poem)
 
     FILE *file = NULL;
 
-    file = fopen("input.txt", "r");
+    file = fopen("input.txt", "rb");
     fseek(file, 0L, SEEK_END);
     *size = ftell(file);
     rewind(file);
 
-    *poem = (char *)calloc(*size, sizeof(char *));
+    *poem = (char *)calloc((*size) + 1, sizeof(char));
     fread(*poem, sizeof(char), *size, file);
+
+    *(*poem + *size) = '\0';
+
     fclose(file);
 
 }
@@ -94,15 +106,16 @@ void input(size_t *size, char **poem)
 void addr_array(char ***addr, int str_num, char *poem, size_t size)
 {
 
-    int str = 1;
+    int str = 0;
 
-    *addr = (char **)calloc(str_num, sizeof(char **));
+    *addr = (char **)calloc(str_num, sizeof(char *));          // char *
     (*addr)[0] = poem;
 
     for (size_t c = 0; c < size; c++)
     {
         printf("%c", poem[c]);
-        if (poem[c] == '\n' || (poem[c] == '\r'))
+
+        if (poem[c] == '\n')
         {
             poem[c] = '\0';
             if (str < str_num)
@@ -111,5 +124,11 @@ void addr_array(char ***addr, int str_num, char *poem, size_t size)
                 str++;
             }
         }
+
+        if (poem[c] == '\r')
+        {
+            poem[c] = '\0';
+        }
     }
+
 }
