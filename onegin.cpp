@@ -1,44 +1,116 @@
 #include <stdio.h>
+#include <assert.h>
 #include <TXLib.h>
 
+struct poem_struct
+{
+
+    size_t size;
+    int str_num;
+    char *poem;
+    char **addr;
+
+};
+
 void input(size_t *size, char **poem);
-void output(char **addr, int str_num);
 void str_count(char *poem, int *str_num, size_t size);
-void addr_array(char ***addr, int str_num, char *poem, size_t size);
-void sort(char **addr, int str_num); 
+void addr_array(struct poem_struct *poem_info);
+void sort(char **addr, int str_num);
+void output(char **addr, int str_num);
+
+//assert
 
 int main()
 {
 
-    // struct poem_struct
-    // {
+    poem_struct poem_info = {};
 
-    //     size_t size = 0;
-    //     int str_num = 0;
-    //     char *poem = NULL;
-    //     char **addr = NULL;
+    input(&poem_info.size, &poem_info.poem);
+    str_count(poem_info.poem, &poem_info.str_num, poem_info.size);
+    addr_array(&poem_info);
+    sort(poem_info.addr, poem_info.str_num);
+    output(poem_info.addr, poem_info.str_num);
 
-    // };
+    free(poem_info.poem);
 
-    // poem_struct poem_info;
+}
 
-    size_t size = 0;
-    int str_num = 0;
-    char *poem = NULL;
-    char **addr = NULL;
+void input(size_t *size, char **poem)
+{
 
-    input(&size, &poem);
-    str_count(poem, &str_num, size);
-    addr_array(&addr, str_num, poem, size);
-    sort(addr, str_num);
-    output(addr, str_num);
+    assert(size != NULL);
+    assert(poem != NULL);
 
-    free(poem);
+    FILE *file = NULL;
+
+    file = fopen("input.txt", "rb");
+    fseek(file, 0L, SEEK_END);
+    *size = ftell(file);
+    rewind(file);
+
+    *poem = (char *)calloc((*size) + 1, sizeof(char));
+    fread(*poem, sizeof(char), *size, file);
+
+    *(*poem + *size) = '\0';
+
+    fclose(file);
+
+}
+
+void str_count(char *poem, int *str_num, size_t size)
+{
+
+    assert(poem != NULL);
+    assert(str_num != NULL);
+    assert(isfinite(size));
+
+    for (size_t c = 0; c < size; c++)
+    {
+        if (poem[c] == '\n')
+        {
+            (*str_num)++;
+        }
+    }
+
+}
+
+void addr_array(poem_struct *poem_info)
+{
+
+    assert(poem_info != NULL);
+
+    int str = 0;
+
+    poem_info->addr = (char **)calloc(poem_info->str_num, sizeof(char *));          // char *
+    (poem_info->addr)[0] = poem_info->poem;
+
+    for (size_t c = 0; c < poem_info->size; c++)
+    {
+        printf("%c", (poem_info->poem)[c]);
+
+        if ((poem_info->poem)[c] == '\n')
+        {
+            (poem_info->poem)[c] = '\0';
+            if (str < poem_info->str_num)
+            {
+                (poem_info->addr)[str] = &(poem_info->poem[c + 1]);
+                str++;
+            }
+        }
+
+        if (poem_info->poem[c] == '\r')
+        {
+            poem_info->poem[c] = '\0';
+        }
+    }
 
 }
 
 void sort(char **addr, int str_num)
 {
+
+    assert(addr != NULL);
+    assert(isfinite(str_num));
 
     char *buffer =NULL;
 
@@ -62,73 +134,14 @@ void sort(char **addr, int str_num)
 void output(char **addr, int str_num)  
 {
 
-    printf("\nsorted poem:\n");
+    assert(addr != NULL);
+    assert(isfinite(str_num));
+
+    printf("\nsorted poem:");
     
     for (int i = 0; i < str_num; i++)
     {
         printf("\n%s", addr[i]); 
-    }
-
-}
-
-void str_count(char *poem, int *str_num, size_t size)
-{
-
-    for (size_t c = 0; c < size; c++)
-    {
-        if (poem[c] == '\n')
-        {
-            (*str_num)++;
-        }
-    }
-
-}
-
-void input(size_t *size, char **poem)
-{
-
-    FILE *file = NULL;
-
-    file = fopen("input.txt", "rb");
-    fseek(file, 0L, SEEK_END);
-    *size = ftell(file);
-    rewind(file);
-
-    *poem = (char *)calloc((*size) + 1, sizeof(char));
-    fread(*poem, sizeof(char), *size, file);
-
-    *(*poem + *size) = '\0';
-
-    fclose(file);
-
-}
-
-void addr_array(char ***addr, int str_num, char *poem, size_t size)
-{
-
-    int str = 0;
-
-    *addr = (char **)calloc(str_num, sizeof(char *));          // char *
-    (*addr)[0] = poem;
-
-    for (size_t c = 0; c < size; c++)
-    {
-        printf("%c", poem[c]);
-
-        if (poem[c] == '\n')
-        {
-            poem[c] = '\0';
-            if (str < str_num)
-            {
-                (*addr)[str] = &poem[c + 1];
-                str++;
-            }
-        }
-
-        if (poem[c] == '\r')
-        {
-            poem[c] = '\0';
-        }
     }
 
 }
