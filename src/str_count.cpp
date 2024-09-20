@@ -5,20 +5,25 @@
 
 #include "../inc/str_count.h"
 
-void str_count(char *poem, int *str_num, size_t size)
+size_t str_count(char *poem, size_t size)
 {
 
     assert(poem != NULL);
-    assert(str_num != NULL);
     assert(isfinite(size));
 
-    for (size_t c = 0; c < size; c++)
+    size_t str_num = 0;
+
+    while (*poem != EOF)
     {
-        if (poem[c] == '\n')
+        if (*poem == '\n')
         {
-            (*str_num)++;
+            str_num++;
         }
+
+        poem++;
     }
+
+    return str_num;
 
 }
 

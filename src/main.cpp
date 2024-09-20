@@ -12,13 +12,13 @@
 int main()
 {
 
-    poem_struct poem_info = {};
+    PoemStruct poem_info = {};
 
-    input(&poem_info.size, &poem_info.poem);
-    str_count(poem_info.poem, &poem_info.str_num, poem_info.size);
+    poem_info.poem = read_file(&poem_info.size);
+    poem_info.str_num = str_count(poem_info.poem, poem_info.size);
     addr_array(&poem_info);
-    sort(poem_info.addr, poem_info.str_num);
-    output(poem_info.addr, poem_info.str_num);
+    sort(poem_info.addr_begin, poem_info.str_num, poem_info.str_len);
+    output(poem_info.addr_begin, poem_info.str_num);
 
     free(poem_info.poem);
 

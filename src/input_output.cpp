@@ -5,25 +5,31 @@
 
 #include "../inc/input_output.h"
 
-void input(size_t *size, char **poem)
+char *read_file(size_t *size)
 {
-
+    
     assert(size != NULL);
-    assert(poem != NULL);
 
-    FILE *file = NULL;
+    char *poem = NULL;
 
-    file = fopen("input.txt", "rb");
+    FILE *file = fopen("input.txt", "rb");
+
+    // assert(*file != NULL);
+
     fseek(file, 0L, SEEK_END);
     *size = ftell(file);
     rewind(file);
 
-    *poem = (char *)calloc((*size) + 1, sizeof(char));
-    fread(*poem, sizeof(char), *size, file);
+    poem = (char *) calloc((*size) + 1, sizeof(char));
+    assert(poem != NULL);
 
-    *(*poem + *size) = '\0';
+    assert(fread(poem, sizeof(char), *size, file) != 0);
 
-    fclose(file);
+    *(poem + *size) = '\0';
+
+    assert(fclose(file) == 0);
+
+    return poem;
 
 }
 
@@ -32,8 +38,6 @@ void output(char **addr, int str_num)
 
     assert(addr != NULL);
     assert(isfinite(str_num));
-
-    printf("\nsorted poem:");
     
     for (int i = 0; i < str_num; i++)
     {
