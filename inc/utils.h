@@ -3,7 +3,14 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "../inc/main.h"
+#include "../inc/input_output.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <math.h>
+#include <string.h>
+#include <ctype.h>
 
 #define RESET "\033[0m"
 #define RED   "\033[1;31m"
@@ -16,6 +23,12 @@ void buffer_clean();
 bool is_zero(double num);
 
 bool is_equal(double num1, double num2);
+
+char *read_file(size_t *size);
+
+size_t file_size(FILE *file);
+
+size_t str_count(char *poem);
 
 #endif // UTILS_H
 

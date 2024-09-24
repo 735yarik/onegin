@@ -56,5 +56,64 @@ void buffer_clean()
 
 }
 
+char *read_file(size_t *size)
+{
+    
+    assert(size != NULL);
+
+    char *poem = NULL;
+
+    FILE *file = fopen("input.txt", "rb");
+    assert(file != NULL);
+
+    *size = file_size(file);
+
+    poem = (char *) calloc((*size) + 1, sizeof(char));
+    assert(poem != NULL);
+
+    assert(fread(poem, sizeof(char), *size, file) != 0);
+
+    *(poem + *size) = '\0';
+
+    assert(fclose(file) == 0);
+
+    return poem;
+
+}
+
+size_t file_size(FILE *file)
+{
+
+    size_t size = 0;
+
+    fseek(file, 0L, SEEK_END);
+    size = ftell(file);
+    rewind(file);
+
+    return size;
+
+}
+
+size_t str_count(char *poem)
+{
+
+    assert(poem != NULL);
+
+    size_t str_num = 0;
+
+    while (*poem != '\0')
+    {
+        if (*poem == '\n')
+        {
+            str_num++;
+        }
+
+        poem++;
+    }
+
+    return str_num;
+
+}
+
 #endif // UTILS_CPP
 
