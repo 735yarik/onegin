@@ -18,6 +18,7 @@ void addr_array(PoemStruct *poem_info)
     poem_info->str_len = (size_t *) calloc(poem_info->str_num, sizeof(size_t));
 
     assert(poem_info->addr_begin != NULL);
+    assert(poem_info->str_len != NULL);
 
 
     while ((poem_info->poem)[c] != '\0')
@@ -26,7 +27,7 @@ void addr_array(PoemStruct *poem_info)
         {
             (poem_info->poem)[c] = '\0';
             
-            //(poem_info->str_len)[str] = c - str_begin;
+            (poem_info->str_len)[str] = c - str_begin;
             (poem_info->addr_begin)[str] = &(poem_info->poem[str_begin]);
 
             str_begin = c + 2;
@@ -50,14 +51,43 @@ void input(PoemStruct *poem_info)
 void output(char **addr, int str_num)  
 {
 
-    FILE *file = fopen("output.txt", "w");
+    FILE *file = fopen("output.txt", "a");
+    assert(file != NULL);
     
     for (int i = 0; i < str_num; i++)
     {
             fprintf(file, "%s\n", addr[i]);
     }
 
-    fclose(file);
+    fprintf(file, "\n");
+
+    assert(fclose(file) == 0);
+
+}
+
+void output_original(char *poem, int str_num)
+{
+
+    int str = 0;
+    int c = 0;
+
+    while(str < str_num)
+    {
+        if (poem[c] == '\0')
+        {
+            poem[c] = '\r';
+            str++;
+        }
+
+        c++;
+    }
+
+    FILE *file = fopen("output.txt", "a");
+    assert(file != NULL);
+
+    fprintf(file, "%s", poem);
+
+    assert(fclose(file) == 0);
 
 }
 

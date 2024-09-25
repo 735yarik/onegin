@@ -84,6 +84,8 @@ char *read_file(size_t *size)
 size_t file_size(FILE *file)
 {
 
+    assert(file != NULL);
+
     size_t size = 0;
 
     fseek(file, 0L, SEEK_END);

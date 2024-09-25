@@ -30,4 +30,6 @@ void input(PoemStruct *poem_info);
 
 void output(char **addr, int str_num);
 
+void output_original(char *poem, int str_num);
+
 #endif // INPUT_OUTPUT_H
