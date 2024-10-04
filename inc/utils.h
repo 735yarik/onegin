@@ -3,8 +3,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "../inc/input_output.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>

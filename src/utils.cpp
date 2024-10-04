@@ -5,6 +5,8 @@
 
 #include "../inc/utils.h"
 
+const char *INPUT_FILE = "input.txt";          //magic const
+
 /**
 * @brief determines if number a zero
 *
@@ -63,7 +65,7 @@ char *read_file(size_t *size)
 
     char *poem = NULL;
 
-    FILE *file = fopen("input.txt", "rb");
+    FILE *file = fopen(INPUT_FILE, "rb");
     assert(file != NULL);
 
     *size = file_size(file);

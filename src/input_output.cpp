@@ -5,6 +5,8 @@
 
 #include "../inc/input_output.h"
 
+const char *OUTPUT_FILE = "output.txt";
+
 void addr_array(PoemStruct *poem_info)
 {
 
@@ -14,21 +16,18 @@ void addr_array(PoemStruct *poem_info)
     size_t c = 0;
     size_t str_begin = 0;
 
-    poem_info->addr_begin = (char **) calloc(poem_info->str_num, sizeof(char *));
-    poem_info->str_len = (size_t *) calloc(poem_info->str_num, sizeof(size_t));
-
-    assert(poem_info->addr_begin != NULL);
-    assert(poem_info->str_len != NULL);
+    poem_info->str_info = (StrStruct *) calloc(poem_info->str_num, sizeof(StrStruct));
+    assert(poem_info->str_info != NULL);
 
 
-    while ((poem_info->poem)[c] != '\0')
+    while (poem_info->poem[c] != '\0')
     {
         if ((poem_info->poem)[c] == '\r')
         {
             (poem_info->poem)[c] = '\0';
             
-            (poem_info->str_len)[str] = c - str_begin;
-            (poem_info->addr_begin)[str] = &(poem_info->poem[str_begin]);
+            ((poem_info->str_info)[str]).str_len = c - str_begin;
+            ((poem_info->str_info)[str]).addr_begin = &(poem_info->poem[str_begin]);
 
             str_begin = c + 2;
             str++;
@@ -42,50 +41,54 @@ void addr_array(PoemStruct *poem_info)
 void input(PoemStruct *poem_info)
 {
 
+    assert(poem_info != NULL);
+
     poem_info->poem = read_file(&poem_info->size);
     poem_info->str_num = str_count(poem_info->poem);
     addr_array(poem_info);
 
 }
 
-void output(char **addr, int str_num)  
+void output(StrStruct *poem_info, int str_num)  
 {
 
-    FILE *file = fopen("output.txt", "a");
+    assert(poem_info != NULL);
+
+    FILE *file = fopen(OUTPUT_FILE, "a");
     assert(file != NULL);
     
     for (int i = 0; i < str_num; i++)
     {
-            fprintf(file, "%s\n", addr[i]);
+        fprintf(file, "%s\n", poem_info[i].addr_begin);
     }
 
     fprintf(file, "\n");
 
-    assert(fclose(file) == 0);
+    assert(!fclose(file));
 
 }
 
 void output_original(char *poem, int str_num)
 {
 
+    assert(poem != NULL);
+    assert(str_num != 0);
+
+    FILE *file = fopen(OUTPUT_FILE, "a");
+    assert(file != NULL);
+
     int str = 0;
     int c = 0;
 
-    while(str < str_num)
+    for (int i = 0; i < str_num; i++)
     {
-        if (poem[c] == '\0')
+        while (poem[c] != '\0')
         {
-            poem[c] = '\r';
-            str++;
+            fprintf(file, "%c", poem[c]);
+            c++;
         }
-
         c++;
     }
-
-    FILE *file = fopen("output.txt", "a");
-    assert(file != NULL);
-
-    fprintf(file, "%s", poem);
 
     assert(fclose(file) == 0);
 
